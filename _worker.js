@@ -887,8 +887,6 @@ export default {
       const uuid = (url.searchParams.get("uuid") || url.searchParams.get("password") || "").trim();
       if (!host || !uuid) return new Response("missing host/uuid", { status: 400 });
 
-      const hostRoot = rootDomain(host);
-
       const baseParams = new URLSearchParams();
       for (const [k, v] of url.searchParams.entries()) {
         if (WORKER_PASSTHROUGH_PARAMS.has(k) && v) baseParams.set(k, v);
@@ -926,21 +924,9 @@ export default {
           const parsed = parseAddrLine(addr);
           if (!parsed) return null;
 
-          const adPlain = stripBracketHost(parsed.ad);
-          const addrIsIp = isIPHost(adPlain);
-
-          let sniLine;
-          if (addrIsIp) {
-            sniLine = host;
-          } else {
-            const adRoot = rootDomain(adPlain);
-            if (hostRoot && adRoot && adRoot === hostRoot) sniLine = adPlain;
-            else sniLine = host;
-          }
-
           const sp = new URLSearchParams(baseParams);
           sp.set("host", host);
-          sp.set("sni", sniLine);
+          sp.set("sni", host); // <--- 已移除逻辑判断，统一将 sni 设为 host
           sp.set("security", "tls");
           sp.set("encryption", "none");
 
