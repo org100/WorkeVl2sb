@@ -1,4 +1,4 @@
-# 🛸 优选订阅生成器
+# 🛸 优选订阅生成器(不修改sni为address最原始的)
 
 > 基于 Cloudflare Workers 的 VLESS 优选 IP 订阅生成器，支持 v2rayN、Clash、Sing-Box、Surge 等主流客户端。
 
